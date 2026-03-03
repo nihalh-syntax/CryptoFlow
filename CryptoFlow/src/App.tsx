@@ -1,10 +1,10 @@
 import './App.css'
-
+import HeroSection from "./HeroSection";
 function App() {
 
   return (
     <div>
-      <h1>CryptoFlow</h1>
+     <HeroSection />
     </div>
   )
 }
