@@ -2,8 +2,8 @@ import { useState, useCallback } from "react";
 import CoinSelector from "./CoinSelector";
 import ChartDisplay from "./ChartDisplay";
 import Status from "./Status";
-import { fetchCoinData } from "./api"; 
-import type { CoinMarketChart } from "./api"; 
+import { fetchCoinData } from "./api";
+import type { CoinMarketChart } from "./api";
 
 type Dataset = {
   label: string;
@@ -18,57 +18,58 @@ export default function Dashboard() {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [status, setStatus] = useState<string>("");
-  const [lastCall, setLastCall] = useState<number>(0);
-  const [lastValidDatasets, setLastValidDatasets] = useState<Dataset[] | null>(null);
 
   const updateChart = useCallback(async () => {
-    const now = Date.now();
-    if (now - lastCall < 10000) { 
-      setStatus("⏳ Bitte 10 Sekunden warten, API Limit schützen");
-      return;
-    }
-    setLastCall(now);
-
-    if (!coins.length) {
-      alert("Bitte mindestens einen Coin auswählen");
-      return;
-    }
-
     setStatus("📡 Lade Kursdaten...");
     const tempDatasets: Dataset[] = [];
     let tempLabels: string[] = [];
 
     for (const coin of coins) {
-      const data: CoinMarketChart | null = await fetchCoinData(coin, days, currency);
-      if (!data?.prices?.length) {
-        setStatus("⚠️ API Limit erreicht – letzte Daten werden angezeigt");
-        if (lastValidDatasets) {
-          setLabels(tempLabels);
-          setDatasets(lastValidDatasets);
-        }
-        return;
+      let data: CoinMarketChart | null = null;
+
+      try {
+        data = await fetchCoinData(coin, days, currency);
+      } catch (err) {
+        console.warn("API Fehler:", err);
       }
 
+      // Wenn API leer oder fehlerhaft → Dummy-Daten verwenden
+      if (!data?.prices?.length) {
+        console.warn(`Keine Daten für ${coin}, benutze Dummy-Daten`);
+        data = {
+          prices: Array.from({ length: days }, (_, i) => [
+            Date.now() - i * 86400000,
+            Math.random() * 50000,
+          ]),
+        };
+        setStatus("⚠️ API Limit oder Fehler – Dummy-Daten werden angezeigt");
+      }
+
+      // Labels nur einmal setzen
       if (!tempLabels.length) {
-        tempLabels = data.prices.map(p => new Date(p[0]).toLocaleDateString());
+        tempLabels = data.prices.map((p) =>
+          new Date(p[0]).toLocaleDateString()
+        );
       }
 
       tempDatasets.push({
         label: coin.toUpperCase(),
-        data: data.prices.map(p => p[1]),
+        data: data.prices.map((p) => p[1]),
         borderWidth: 2,
       });
     }
 
     setLabels(tempLabels);
     setDatasets(tempDatasets);
-    setLastValidDatasets(tempDatasets);
-    setStatus("");
-  }, [coins, days, currency, lastCall, lastValidDatasets]);
+
+    // Status leeren, wenn echte Daten vorhanden
+    if (!status.includes("Dummy")) setStatus("");
+  }, [coins, days, currency, status]);
 
   return (
     <div style={{ maxWidth: "900px", margin: "40px auto", fontFamily: "sans-serif" }}>
-      <h1>📈 Krypto Dashboard</h1>
+      <h1>Siehe Kursverlauf des Bitcoins und anderer Coins</h1>
+
       <CoinSelector
         coins={coins}
         setCoins={setCoins}
@@ -77,14 +78,20 @@ export default function Dashboard() {
         currency={currency}
         setCurrency={setCurrency}
       />
+
       <button
         onClick={updateChart}
         style={{ padding: "5px 10px", marginBottom: "10px" }}
       >
         Aktualisieren
       </button>
+
       <Status message={status} />
-      <ChartDisplay labels={labels} datasets={datasets} />
+
+      {/* Chart nur rendern, wenn Labels/Datasets existieren */}
+      {datasets.length > 0 && labels.length > 0 && (
+        <ChartDisplay labels={labels} datasets={datasets} />
+      )}
     </div>
   );
 }
