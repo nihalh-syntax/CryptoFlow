@@ -12,7 +12,7 @@ const NavBar = () => {
     <div className='flex items-center justify-between px-4 py-5 bg-black'>
         <div className="flex items-center gap-2">
           <TrendIcon />
-          <h1 className='text-2xl font-bold bg-linear-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent logo-text-glow'>
+          <h1 className='text-2xl font-bold bg-linear-to-r from-cyan-600 to-red-500 bg-clip-text text-transparent'>
             CryptoFlow
           </h1>
         </div>
@@ -26,7 +26,7 @@ const NavBar = () => {
                 <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
             </NavLink>
             <li>
-                <button className='bg-linear-to-r from-cyan-400 to-purple-600 text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer'>
+                <button className='bg-linear-to-r from-cyan-600 to-red-600 text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer'>
                     Get Started
                 </button>
             </li>
