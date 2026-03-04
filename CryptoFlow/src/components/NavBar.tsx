@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { ModeToggle } from './ToggleMode'
 
 const TrendIcon = () => (
   <svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 text-cyan-400 logo-glow" aria-hidden>
@@ -25,6 +26,9 @@ const NavBar = () => {
                 <p>Dashboard</p>
                 <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
             </NavLink>
+            <li>
+                <ModeToggle />
+            </li>
             <li>
                 <button className='bg-linear-to-r from-cyan-600 to-red-600 text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer'>
                     Get Started
