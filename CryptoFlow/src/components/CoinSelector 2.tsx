@@ -28,7 +28,6 @@ export default function CoinSelector({
     >
     
       <select
-        multiple
         value={coins}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
           setCoins([...e.target.selectedOptions].map((o) => o.value))
