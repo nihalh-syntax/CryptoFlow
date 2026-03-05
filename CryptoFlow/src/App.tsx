@@ -5,8 +5,9 @@ import Dashboard from './components/Dashboard'
 import NavBar from './components/NavBar'
 import { ThemeProvider } from './components/ThemeProvider'
 
+
 function App() {
-  return (
+   return (
     <ThemeProvider>
     <div> 
     <NavBar />
