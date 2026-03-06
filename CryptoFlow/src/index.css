@@ -16,6 +16,20 @@ a.active hr {
     filter: drop-shadow(0 0 4px rgb(34 211 238 / 0.8)) drop-shadow(0 0 12px rgb(34 211 238 / 0.5));
 }
 
+/* One-scroll full-page transition: Hero → Dashboard */
+.scroll-container {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+.scroll-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: 100%;
+}
+
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
