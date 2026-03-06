@@ -22,10 +22,10 @@ const NavBar = () => {
                 <p>Home</p>
                 <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
             </NavLink>
-            <NavLink to="/dashboard" className='flex flex-col items-center gap-2'>
+            <a href="/#dashboard" className='flex flex-col items-center gap-2 text-gray-300 hover:text-white transition-colors'>
                 <p>Dashboard</p>
                 <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
-            </NavLink>
+            </a>
             <li>
                 <ModeToggle />
             </li>
