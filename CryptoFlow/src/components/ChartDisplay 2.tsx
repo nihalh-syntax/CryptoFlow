@@ -1,31 +1,65 @@
-import { useRef, useEffect } from "react";
-import Chart from "chart.js/auto";
-import type { Chart as ChartJS, ChartData, ChartDataset } from "chart.js";
+import { forwardRef, useEffect } from "react";
+import { type ChartConfiguration } from "chart.js";
+
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
+
+type Dataset = {
+  label: string;
+  data: number[];
+  borderWidth: number;
+  tension: number;
+  borderColor: string;
+  backgroundColor?: string;
+  pointRadius: number;
+  hidden?: boolean;
+};
 
 type ChartDisplayProps = {
   labels: string[];
-  datasets: ChartDataset<"line", number[]>[];
+  datasets: Dataset[];
 };
 
-export default function ChartDisplay({ labels, datasets }: ChartDisplayProps) {
-  const chartRef = useRef<HTMLCanvasElement | null>(null);
-  const chartInstance = useRef<ChartJS | null>(null);
-
+const ChartDisplay = forwardRef<Chart, ChartDisplayProps>(({ labels, datasets }, ref) => {
   useEffect(() => {
-    if (!chartRef.current) return;
-    if (chartInstance.current) chartInstance.current.destroy();
+    const ctx = document.getElementById("myChart") as HTMLCanvasElement;
+    if (!ctx) return;
 
-    chartInstance.current = new Chart(chartRef.current, {
+    const config: ChartConfiguration = {
       type: "line",
-      data: { labels, datasets } as ChartData<"line">,
+      data: { labels, datasets },
       options: {
         responsive: true,
-        interaction: { mode: "index", intersect: false },
+        animation: { duration: 500 },
+        plugins: { legend: { display: true } },
+        scales: { x: { display: true }, y: { display: true } },
       },
-    });
+    };
 
-    return () => chartInstance.current?.destroy();
+    const chartInstance = new Chart(ctx, config);
+
+    if (ref) {
+      if (typeof ref === "function") {
+        ref(chartInstance);
+      } else {
+        (ref as React.MutableRefObject<Chart | null>).current = chartInstance;
+      }
+    }
+
+    return () => chartInstance.destroy();
   }, [labels, datasets]);
 
-  return <canvas ref={chartRef} />;
-}
+  return <canvas id="myChart" />;
+});
+
+export default ChartDisplay;
