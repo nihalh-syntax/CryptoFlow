@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Homepage from './components/Homepage'
 import NavBar from './components/NavBar'
 import { ThemeProvider } from './components/ThemeProvider'
+import Dashboard from './components/Dashboard'
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
       <main className="flex-1 min-h-0">
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/dashboard" element={<Navigate to="/#dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </main>
     </div>

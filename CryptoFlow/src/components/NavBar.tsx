@@ -10,7 +10,7 @@ const TrendIcon = () => (
 
 const NavBar = () => {
   return (
-    <div className='flex items-center justify-between px-4 py-5 bg-black'>
+    <div className='flex items-center justify-between px-4 py-5'>
         <div className="flex items-center gap-2">
           <TrendIcon />
           <h1 className='text-2xl font-bold bg-linear-to-r from-cyan-600 to-red-500 bg-clip-text text-transparent'>
