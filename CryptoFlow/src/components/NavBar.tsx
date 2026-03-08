@@ -18,14 +18,26 @@ const NavBar = () => {
           </h1>
         </div>
         <ul className='sm:flex hidden items-center gap-5 text-sm text-gray-300'>
-            <NavLink to="/" className='flex flex-col items-center gap-2'>
-                <p>Home</p>
-                <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
+            <NavLink to="/" end className={({ isActive }) =>
+              `flex flex-col items-center gap-1 transition-colors ${isActive ? 'text-white' : 'hover:text-white'}`
+            }>
+              {({ isActive }) => (
+                <>
+                  <p>Home</p>
+                  <span className={`h-[1.5px] rounded-full bg-cyan-400 transition-all duration-300 ${isActive ? 'w-3/4' : 'w-0'}`} />
+                </>
+              )}
             </NavLink>
-            <a href="/#dashboard" className='flex flex-col items-center gap-2 text-gray-300 hover:text-white transition-colors'>
-                <p>Dashboard</p>
-                <hr className='w-2/4 border-none h-[1.5px] bg-gray-500 hidden' />
-            </a>
+            <NavLink to="/dashboard" className={({ isActive }) =>
+              `flex flex-col items-center gap-1 transition-colors ${isActive ? 'text-white' : 'hover:text-white'}`
+            }>
+              {({ isActive }) => (
+                <>
+                  <p>Dashboard</p>
+                  <span className={`h-[1.5px] rounded-full bg-cyan-400 transition-all duration-300 ${isActive ? 'w-3/4' : 'w-0'}`} />
+                </>
+              )}
+            </NavLink>
             <li>
                 <ModeToggle />
             </li>
